@@ -5,7 +5,7 @@ import logic.Logic;
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO 自動生成されたメソッド・スタブ
+		// Logicクラスの起動
 		Logic logic = new Logic();
 		logic.start();
 	}

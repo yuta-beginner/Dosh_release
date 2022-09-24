@@ -10,9 +10,6 @@ import java.util.Properties;
 import constraint.MessageConstraint;
 
 public class PropertiesUtil {
-	// 使わなくてもいいけど、用意しておくのがUtil⇒「あくまでこの範疇のものを使ってね。」というもの
-	// Javaのオブジェクト指向は「管理がしやすいもの（外れたモノを見つける方が楽）」＝ルール（100％正しいとは言えないが、楽にするためのもの）
-	
 	// 変数
 	// プロパティファイルのパス
 	private String propertiesFilePath = MessageConstraint.MESSAGE_PROPERTIES_PATH;
@@ -41,8 +38,6 @@ public class PropertiesUtil {
 	}
 
 	public String getValueFormattedString(String key, Object[] obj) {
-		// 数字として扱う数と表示として扱う数
-		// 数字を扱うときに数値と文字列の両方がある（ヒント）
 		return MessageFormat.format(getProperty().getProperty(key), obj);
 	}
 

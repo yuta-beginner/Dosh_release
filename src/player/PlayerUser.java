@@ -26,19 +26,9 @@ public class PlayerUser extends Player implements DoshConstraint{
 	public int selectCheatType() {
 		int userCheatType = 0;
 		Scanner scanner = new Scanner(System.in);
-		// デバッグ用メッセージ
-		//System.out.println("イカサマするか選択してください。(0～2を入力)");
-		//System.out.println("0 : ゾロ目を出す" + " " + "1 : 7以下の目を出す" + " " + "2：7以上の目を出す");
 
 		// イカサマの種類を入力して選択
 		userCheatType = scanner.nextInt();
-
-		/*while(userCheatType > 2 || userCheatType < 0) {
-			System.out.println("0～2を入力してください");
-			System.out.println("0 : ゾロ目を出す" + " " + "1 : 7以下の目を出す" + " " + "2：7以上の目を出す");
-			userCheatType = scanner.nextInt();
-		}*/
-
 		return userCheatType;
 	}
 
@@ -49,13 +39,7 @@ public class PlayerUser extends Player implements DoshConstraint{
 		for(int i = 0; i < 2; i++) {
 			Dices.add(randomNumber);
 		}
-		/*for (int i = 0; i < 2; i++) {
-			Integer diceNumber = Dices.get(i);
-			int dice = i + 1;
-			System.out.println("ダイス" + dice + "個目は" + diceNumber + "です。");
-		}*/
 		setDiceNumberAmount();
-		//System.out.println("合計値は" + diceNumberAmount + "です");
 	}
 
 	// 7以下の目を出す

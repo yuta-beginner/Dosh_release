@@ -15,11 +15,6 @@ import player.Player;
 import player.PlayerUser;
 import util.PropertiesUtil;
 
-// interfaceを継承する。
-// 違和感に気付くように整えていく（命名・パッケージ・コメントの全角半角等の習慣化）。
-// レビューをする際の観点（命名・パッケージ・コメントの全角半角等）を身に付ける。
-// プログラムは命名で書く。「変数宣言⇒変数がどう処理される⇒変数がどうなるか」のサイクル。
-// 法則性（一部分ミスをしていたら他の部分もチェックする癖（all or nothing））を見る。
 public class Logic implements DoshConstraint, PropertiesKey{
 	// 変数
 	// プレーヤーの人数
@@ -35,7 +30,6 @@ public class Logic implements DoshConstraint, PropertiesKey{
 	// ゲーム終了後に所持チップが0枚ではないプレーヤー
 	ArrayList<Player> remainedPlayerList = new ArrayList<Player>();
 	// プレーヤーの順位
-
 	Map<Integer, List<Player>> playerRank = new HashMap<>();
 
 	// ターンとプレーヤーの配列
@@ -59,21 +53,15 @@ public class Logic implements DoshConstraint, PropertiesKey{
 	String[] chipMasuCharacter = new String[9];
 
 	// 各マスのチップの枚数
-	// 配列にまとめてしまう方がいい。（ヒント）
-	// 連続したデータは配列。
 	int[] masuChip = new int[9]; 
-
-	// 
+ 
 	MessageConstraint mc = new MessageConstraint();
 	PropertiesUtil pu = new PropertiesUtil();
 	DisplayManager dm = new DisplayManager();
 	Scanner sc = new Scanner(System.in);
 
-	// 分けることが小回りも効いてくる。（例：start(),process(),finish()で分けるなど)
-	// オブジェクト指向＝ディレクトリ構造⇒構造を押さえるということが重要
-	// 原則原理を分かった上での、オブジェクト指向
+	//ゲーム開始前の準備
 	public void start() {
-		// 連続したものはfor文で回せるか
 		// Doshのタイトルを表示
 		String doshTitle = pu.getValueStringList(DOSH_TITLE_KEY, DOSH_TITLE_START, DOSH_TITLE_END);
 		dm.showDoshTitle(doshTitle);
@@ -106,30 +94,10 @@ public class Logic implements DoshConstraint, PropertiesKey{
 		// プレイヤーとコンピューターを作り、playerListにセットする。
 		computer = pu.getValueString(COMPUTER_KEY);
 		startChip = pu.getValueInt(START_CHIP_KEY);
-		//(debug用)startChipの枚数を出力する。
-		//System.out.println("ゲーム開始時のチップは" + startChip + "です。");
 		setPlayers(computer, startChip);
-
-		// (debug用)Playerリストがセットされているか
-		/*System.out.print("debug用:");
-		for(int i = 0; i < playerList.size(); i++) {
-			Player player = playerList.get(i);
-			String playerName = player.getPlayerName();
-			System.out.print(playerName + " ");
-		}
-		System.out.println();*/
 
 		// playerListをシャッフルする。
 		Collections.shuffle(playerList);
-
-		// (debug用)Playerリストがシャッフルされているか
-		/*System.out.print("debug用:");
-		for(int i = 0; i < playerList.size(); i++) {
-			Player player = playerList.get(i);
-			String playerName = player.getPlayerName();
-			System.out.print(playerName + " ");
-		}
-		System.out.println();*/
 
 		// チップが置いていない場合に表示する数字を配列にセット。
 		int normalMasuCharacterLength = normalMasuCharacter.length;
@@ -137,12 +105,6 @@ public class Logic implements DoshConstraint, PropertiesKey{
 			int propertyNormalNumber = i + 1;
 			normalMasuCharacter[i] = pu.getValueString(NORMAL_NUMBER_KEY + propertyNormalNumber);
 		}
-
-		// (debug用)チップが置いていない場合に表示する数字を配列にセット。
-		/*System.out.print("debug用:");
-		for(int i = 0; i < normalMasuCharacterLength; i++) {
-			System.out.print(normalMasuCharacter[i]);
-		}*/
 
 		System.out.println();
 
@@ -153,12 +115,6 @@ public class Logic implements DoshConstraint, PropertiesKey{
 			chipMasuCharacter[i] = pu.getValueString(CHIP_NUMBER_KEY + propertyChipNumber);
 		}
 
-		// (debug用)チップが置いてある場合に表示する数字を配列にセット
-		/*System.out.print("debug用:");
-		for(int i = 0; i < chipMasuCharacterLength; i++) {
-			System.out.print(chipMasuCharacter[i]);
-		}*/
-
 		System.out.println();
 
 		// 各マスに初期値0枚のチップをセット
@@ -166,9 +122,6 @@ public class Logic implements DoshConstraint, PropertiesKey{
 		for(int i = 0; i < masuChipLength; i++) {
 			masuChip[i] = 0;
 		}
-
-		//(debug用)3のマスに5枚チップ置く。
-		//masuChip[0] = 5;
 
 		// Doshスタートのメッセージを出力
 		String startDoshPlay = pu.getValueString(START_DOSH_PLAY_KEY);
@@ -190,11 +143,11 @@ public class Logic implements DoshConstraint, PropertiesKey{
 		dm.showPressEnter(pressEnter);
 		sc.nextLine();
 
-		//System.out.println("start終了");// (debug用)
-
+		// ゲーム開始の処理
 		process();
 	}
 
+	// ゲーム開始
 	public void process() {
 		int playerListSize = playerList.size();
 		boolean isRepeatGame = true;
@@ -220,13 +173,9 @@ public class Logic implements DoshConstraint, PropertiesKey{
 
 				dm.showBoard(board);
 				
-				
 				String playerClass = player.getClass().getSimpleName();
-				//System.out.println(playerClass);
+				
 				if (playerClass.equals(playerUserClassName)) {
-					//(debug用)
-					/*int debugPlayerChip = 1;
-					player.setPlayerChip(debugPlayerChip);*/
 					
 					PlayerUser playerUser = (PlayerUser)player;
 
@@ -283,8 +232,6 @@ public class Logic implements DoshConstraint, PropertiesKey{
 				if(playerDiceNumberAmount > 2 && playerDiceNumberAmount < 12 ) {
 					isMasuChip = isMasuChip(playerDices);
 				}
-				//System.out.println(isMasuChip);
-
 
 				if(isMasuChip && playerDiceNumberAmount != 7) {
 					int playerGetChip = reduceChipFromMasu(playerDiceNumberAmount);
@@ -365,9 +312,6 @@ public class Logic implements DoshConstraint, PropertiesKey{
 						int playerAllChip = player.getPlayerChip();
 						//int playerSecondAmount = player.getDiceNumberAmount();
 						int playerMinusChip = setChipToMasu(playerSecondDiceAmount, playerAllChip);
-						//(debug用)
-						//System.out.println("debug用：2回目のダイスを振った結果、" + playerSecondDiceAmount + "のマスに" + playerMinusChip + "枚置きました");
-						//int playerMinusChip = getMasuChip(playerSecondDiceAmount);
 						player.minusPlayerChip(playerMinusChip);
 
 						//7が出た時の「牢獄に入りました。」のメッセージを表示
@@ -381,19 +325,11 @@ public class Logic implements DoshConstraint, PropertiesKey{
 						String chipMasuMessage = pu.getValueFormattedString(CHIP_MASU_MESSAGE_KEY, ojChipMasu);
 						dm.showChipMasuMessage(chipMasuMessage);
 
-						//(debug用)2回目のダイスを振って、ゾロ目ではなかった時のプレーヤーの枚数
-						//System.out.println("2回目のダイスを振った後のプレイヤーの2個のダイスの合計の数は" + player.getDiceNumberAmount() + "です。");
 						System.out.println();
-						//(debug用)2回目のダイスを振って、プレイヤーユーザーが特定のマスにチップを置いた後の各マスのチップ枚数
-						/*for(int j = 0; j < masuChip.length; j++) {
-							System.out.print(masuChip[j] + " ");
-						}
-						System.out.println();*/
 					}
 				} else {
 					int playerAllChip = player.getPlayerChip();
 					int playerMinusChip = setChipToMasu(playerDiceNumberAmount, playerAllChip);
-					//System.out.println("debug用：ダイスを振った結果、" + playerDiceNumberAmount + "のマスに" + playerMinusChip + "枚置きました");
 
 					//7が出た時の「牢獄に入りました。」のメッセージを表示
 					if(playerDiceNumberAmount == 7) {
@@ -408,16 +344,6 @@ public class Logic implements DoshConstraint, PropertiesKey{
 					player.minusPlayerChip(playerMinusChip);
 				}
 
-
-				//(debug用)masuChipを表示
-				/*for(int j = 0; j < masuChip.length; j++) {
-					System.out.print(masuChip[j] + " ");
-				}*/
-
-				//(debug用)そのターンのプレーヤーのチップを表示
-				/*int playerChip = player.getPlayerChip();
-				System.out.println(playerName + "のチップ枚数は、" + playerChip + "です。");*/
-
 				System.out.println();
 
 				setMasu();
@@ -430,12 +356,6 @@ public class Logic implements DoshConstraint, PropertiesKey{
 				player.clearDices();
 				// 各プレーヤーダイスの合計値をクリア
 				player.clearDiceAmount();
-
-				//(debug用)playerUserのチップを強制的に0にする。
-				/*if(playerName.equals("あなた")) {
-					playerChip = 0;
-					player.setPlayerChip(playerChip);
-				}*/
 
 				// 各プレーヤーのチップを表示
 				for(int j = 0; j < playerListSize; j++) {
@@ -462,14 +382,12 @@ public class Logic implements DoshConstraint, PropertiesKey{
 				sc.nextLine();
 			}
 		}
-		//(debug用)for文・while文抜けたかどうかチェック
-		//System.out.println("debug用：process()が終了しました。");
+		
+		// ゲーム終了の処理
 		finish();
 	}
 
 	public void finish() {
-		//(debug用)finish()に入ったかどうかチェック
-		//System.out.println("debug用：finish()に入りました。");
 		
 		//GAME OVERを表示する。
 		System.out.println();
@@ -491,8 +409,6 @@ public class Logic implements DoshConstraint, PropertiesKey{
 				int comparisonPlayerChip = comparisonPlayer.getPlayerChip();
 				if(remainedPlayerChip < comparisonPlayerChip) {
 					remainedPlayerRank ++;
-					//(debug用)プレイヤーのランクがカウントアップされたことを出力。
-					//System.out.println("debug用：" + remainedPlayer.getPlayerName() + "のランクが" + remainedPlayerRank + "位になりました。");
 				}
 			}
 			List<Player> winners;
@@ -500,42 +416,11 @@ public class Logic implements DoshConstraint, PropertiesKey{
 				winners = playerRank.get(remainedPlayerRank);
 				winners.add(remainedPlayer);
 			} catch(Exception e) {
-				//System.out.println("debug用：リストを取得できませんでした。");
 				winners = new ArrayList<Player>();
 				winners.add(remainedPlayer);
 			}
-			//winners.add(remainedPlayer);
 			playerRank.put(remainedPlayerRank, winners);
-			//playerRank.put(remainedPlayerRank, remainedPlayer);
 		}
-		//(debug用)残ったプレーヤーの順位と名前を出力する。
-		/*try {
-			List<Player> winner1 = playerRank.get(1);
-			for(int i = 0; i < winner1.size(); i++) {
-				Player eachPlayer = winner1.get(i);
-				System.out.println("1位のプレーヤーは、" + eachPlayer.getPlayerName() + "です。");
-			}
-		} catch(Exception e) {
-			System.out.println("1位のプレーヤーはいません。");
-		}
-		try {
-			List<Player> winner2 = playerRank.get(2);
-			for(int i = 0; i < winner2.size(); i++) {
-				Player eachPlayer = winner2.get(i);
-				System.out.println("2位のプレーヤーは、" + eachPlayer.getPlayerName() + "です。");
-			}
-		} catch(Exception e) {
-			System.out.println("2位のプレーヤーはいません。");
-		}
-		try {
-			List<Player> winner3 = playerRank.get(3);
-			for(int i = 0; i < winner3.size(); i++) {
-				Player eachPlayer = winner3.get(i);
-				System.out.println("3位のプレーヤーは、" + eachPlayer.getPlayerName() + "です。");
-			}
-		} catch(Exception e) {
-			System.out.println("3位のプレーヤーはいません。");
-		}*/
 		
 		System.out.println();
 		
@@ -550,7 +435,6 @@ public class Logic implements DoshConstraint, PropertiesKey{
 
 	// プレーヤー人数を設定するメソッド
 	private void setPlayerNumber() {
-		// 「プレーヤーの人数を入力してください。」と表示
 		// Scannerで人数を入力できるようにする。
 		Scanner scan = new Scanner(System.in);
 		playerNumber = scan.nextInt();
@@ -576,16 +460,9 @@ public class Logic implements DoshConstraint, PropertiesKey{
 		for(int i = 0; i < playerListSize; i++) {
 			Player afterGamePlayer =  playerList.get(i);
 			int afterGamePlayerChip = afterGamePlayer.getPlayerChip();
-			//(debug用)各プレーヤーのゲーム終了後のチップ枚数を出力。
-			//System.out.println(afterGamePlayer.getPlayerName() + "のチップ枚数は、" + afterGamePlayerChip + "枚です。");
 			if(afterGamePlayerChip > 0) {
 				remainedPlayerList.add(afterGamePlayer);
-				//(debug用)remainedPlayerListに加えたプレーヤーの名前を出力。
-				//System.out.println(afterGamePlayer.getPlayerName() + "をremainedPlayerListに加えました。");
-			} /*else {
-				//(debug用)remainedPlayerListに加えなかったプレーヤーの名前を出力。
-				//System.out.println(afterGamePlayer.getPlayerName() + "をremainedPlayerListに加えませんでした。");
-			}*/
+			}
 		}
 	}
 
