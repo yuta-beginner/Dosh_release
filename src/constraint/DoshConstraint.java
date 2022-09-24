@@ -2,8 +2,6 @@ package constraint;
 
 public interface DoshConstraint {
 	// properties用のkey
-	// 固定値だから命名は大文字+_
-	// 修飾子も直す。
 	public final String DOSH_TITLE_KEY ="dosh.title";
 	public final String DEFAULT_BOARD_KEY = "dosh.defaultBoard";
 	public final String RULE_ABSTRACT_KEY = "dosh.ruleAbstract";
