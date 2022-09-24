@@ -1,6 +1,19 @@
 package constraint;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class MessageConstraint {
 	// メッセージに関するプロパティファイルを管理する。
-	public static final String MESSAGE_PROPERTIES_PATH = "C:\\Users\\sy031\\pleiades-2022-06-java-win-64bit-jre_20220619\\workspace\\Dosh\\src\\message.properties"; 
+	private final String MESSAGE_PROPERTIES="src/message.properties";
+	private String messagePropertiesPath;
+	
+	public void setMessagePropertiesPath() {
+        Path path = Paths.get(MESSAGE_PROPERTIES);
+        messagePropertiesPath = path.toAbsolutePath().toString();
+	}
+	
+	public String getMessagePropertiesPath() {
+		return messagePropertiesPath;
+	}
 }

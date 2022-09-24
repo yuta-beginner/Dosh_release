@@ -11,15 +11,27 @@ import constraint.MessageConstraint;
 
 public class PropertiesUtil {
 	// 変数
+	MessageConstraint mc = new MessageConstraint();
 	// プロパティファイルのパス
-	private String propertiesFilePath = MessageConstraint.MESSAGE_PROPERTIES_PATH;
+	private String propertiesPath;
 	// プロパティファイルの文字コード
 	private String charsetName = "UTF-8";
+	
+	public PropertiesUtil() {
+		setPropetiesPath();
+	}
+	
+	public void setPropetiesPath() {
+		mc.setMessagePropertiesPath();
+		propertiesPath = mc.getMessagePropertiesPath();
+	}
 
 	public Properties getProperty() {
+		//setPropetiesPath();
 		Properties pro = new Properties();
 		try {
-			pro.load(new InputStreamReader(new FileInputStream(propertiesFilePath), charsetName));
+			//pro.load(new InputStreamReader(new FileInputStream(propertiesFilePath), charsetName));
+			pro.load(new InputStreamReader(new FileInputStream(propertiesPath), charsetName));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
